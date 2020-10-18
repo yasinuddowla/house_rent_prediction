@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-sm-4 form-group">
                         <label> Area </label>
-                        <select name="area" class="form-control">
+                        <select name="area" onchange="getRentPrediction()" class="form-control">
                             <option value="" selected disabled>Select Area</option>
                             <option value="100">ADABAR</option>
                             <option value="101">AFTABNAGAR</option>
@@ -94,11 +94,11 @@
             <div class="row">
                 <div class="col-sm-4 form-group">
                     <label>Size</label>
-                    <input class="form-control" type="number" name="size" placeholder=" Square feet">
+                    <input class="form-control" onchange="getRentPrediction()" type="number" name="size" placeholder=" Square feet">
                 </div>
                 <div class="col-sm-4 form-group">
                     <label>Baths</label>
-                    <select name="basize" class="form-control">
+                    <select name="basize" onchange="getRentPrediction()" class="form-control">
                         <option value="" selected disabled>Select Number of Baths</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -144,7 +144,20 @@
                 </div>
                 <div class="col-sm-6 form-group">
                     <label>Predicted Rent</label>
-                    <input class="form-control" disabled id="p-rent" placeholder=" Taka per month">
+                    <div class="input-group">
+                        <input class="form-control" disabled id="p-rent" placeholder=" Taka per month">
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <img id="load-img" src="img/loader-2.gif" alt="">
+                                <span id="load-check" style="color:green">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                    </svg>
+                                </span>
+                            </span>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
             <div>
@@ -153,12 +166,20 @@
         </form>
     </div>
     <script>
+        $("#load-img").hide()
+        $("#load-check").hide()
         function getRentPrediction(){
+            $("#load-check").hide()
+            $("#load-img").show()
             let beds = $("select[name=bsize]").val()
             let baths = $("select[name=basize]").val()
             let size = $("input[name=size]").val()
             let area = $("select[name=area]").val()
-            console.log(beds,baths,size)
+            if(beds == null || baths == null || size == null || area == null){
+                $("#p-rent").val('N/A')
+                $("#load-img").hide()
+                $("#load-check").hide()
+            }
             var form = new FormData();
             form.append("size", size);
             form.append("bed", beds);
@@ -166,7 +187,7 @@
             form.append("area",area);
 
             var settings = {
-                "url": "http://localhost/House-Renting/prediction/api.py",
+                "url": "http://localhost/projects/sadiaislam/api.py",
                 "method": "POST",
                 "timeout": 0,
                 "processData": false,
@@ -179,6 +200,8 @@
                 console.log(response);
                 let rent = JSON.parse(response)
                 $("#p-rent").val(rent.predicted)
+                $("#load-img").hide()
+                $("#load-check").show()
             });
         }
         

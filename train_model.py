@@ -35,7 +35,7 @@ def mean_absolute_percentage_error(y_true, y_pred):
 from sklearn import metrics
 
 print("Model Saved<br><br>")
-print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred),'<br>')
 print('Mean Absolute Percentage Error:', mean_absolute_percentage_error(y_test, y_pred),'<br>')
 print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred),'<br>')
 print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)),'<br>')
